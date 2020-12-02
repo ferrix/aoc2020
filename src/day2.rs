@@ -23,7 +23,7 @@ pub fn solve_part1(input: &[Cred]) -> u32 {
     input
         .iter()
         .map(|c| {
-            let count = c.password.matches(c.letter).count() as u32;
+            let count = c.password.chars().filter(|x| *x == c.letter).count() as u32;
 
             if c.low <= count && count <= c.high {
                 1
