@@ -1,12 +1,13 @@
 use std::collections::HashSet;
-use std::num::ParseIntError;
 
 #[aoc_generator(day1)]
-pub fn input_generator(input: &str) -> Result<Vec<u32>, ParseIntError> {
-    input
+pub fn input_generator(input: &str) -> Vec<u32> {
+    let mut input: Vec<_> = input
         .lines()
-        .map(|l| l.parse())
-        .collect()
+        .map(|l| l.parse().unwrap())
+        .collect();
+        input.sort_unstable();
+        input
 }
 
 #[aoc(day1, part1)]
