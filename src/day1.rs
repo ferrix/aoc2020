@@ -25,8 +25,8 @@ pub fn solve_part1(input: &[u32]) -> u32 {
     panic!("no solution")
 }
 
-#[aoc(day1, part2)]
-pub fn solve_part2(input: &[u32]) -> u32 {
+#[aoc(day1, part2, iter)]
+pub fn solve_part2_iter(input: &[u32]) -> u32 {
     for i in 0..input.len() {
         let e = input[i];
         let remains = 2020 - e;
@@ -43,8 +43,8 @@ pub fn solve_part2(input: &[u32]) -> u32 {
     panic!("no solution")
 }
 
-#[aoc(day1, part2, filters)]
-fn solve_part2_filt(input: &[u32]) -> u32 {
+#[aoc(day1, part2)]
+fn solve_part2(input: &[u32]) -> u32 {
     input
         .iter()
         .tuple_combinations::<(&u32, &u32)>()
