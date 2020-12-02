@@ -1,3 +1,7 @@
+extern crate serde;
+extern crate serde_scan;
+
+#[derive(Deserialize, Debug, PartialEq)]
 pub struct Cred {
     low: u32,
     high: u32,
@@ -10,15 +14,7 @@ pub fn input_generator(input: &str) -> Vec<Cred> {
     input
         .lines()
         .map(|l| {
-            let cred: Vec<&str> = l.trim().split(" ").collect();
-            let mut parts = cred[0].split("-").map(|n| n.parse::<u32>());
-            let letter = &cred[1].chars().nth(0);
-            Cred {
-                low: parts.next().unwrap().unwrap(),
-                high: parts.next().unwrap().unwrap(),
-                letter: letter.unwrap(),
-                password:cred[2].to_string(),
-            }
+            serde_scan::scan!("{}-{} {}: {}" <- l).unwrap()
         }).collect()
 }
 
