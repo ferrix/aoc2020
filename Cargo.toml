@@ -1,0 +1,11 @@
+[package]
+name = "advent-of-code-2020"
+version = "0.1.0"
+authors = ["Ferrix Hovi <ferrix@ferrix.fi"]
+
+[lib]
+bench = false
+
+[dependencies]
+aoc-runner = "0.2.2"
+aoc-runner-derive = "0.2.2"
