@@ -1,4 +1,5 @@
 extern crate aoc_runner;
+extern crate itertools;
 
 #[macro_use]
 extern crate aoc_runner_derive;

@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use itertools::Itertools;
 
 #[aoc_generator(day1)]
 pub fn input_generator(input: &str) -> Vec<u32> {
@@ -40,4 +41,15 @@ pub fn solve_part2(input: &[u32]) -> u32 {
         }
     }
     panic!("no solution")
+}
+
+#[aoc(day1, part2, filters)]
+fn solve_part2_filt(input: &[u32]) -> u32 {
+    input
+        .iter()
+        .tuple_combinations::<(&u32, &u32)>()
+        .filter(|&(v1, v2)| v1 + v2 < 2020)
+        .find(|&(v1, v2)| input.binary_search(&(2020 - v1 - v2)).is_ok())
+        .map(|(v1, v2)| v1 * v2 * (2020 - v1 - v2))
+        .unwrap()
 }
