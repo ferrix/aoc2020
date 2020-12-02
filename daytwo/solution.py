@@ -1,16 +1,12 @@
-
-test_lines = """1-3 a: abcde
-1-3 b: cdefg
-2-9 c: ccccccccc
-"""
-
 valid = 0
 
-for line in test_lines.splitlines():
+with open('input.txt') as f:
+    lines = f.readlines()
+
+for line in lines:
     low, line = line.split("-")
     line, password = line.split(": ")
     high, letter = line.split()
-    print(low, password.count(letter), int(high))
     if int(low) <= password.count(letter) <= int(high):
         valid += 1
 
