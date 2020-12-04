@@ -1,77 +1,42 @@
 import re
-
-with open('../input/2020/day4.txt') as f:
-    content = f.read()
-
-entries = content.split("\n\n")
-
-valid = 0
-new_valid = 0
+from functools import partial
 
 
-def valid_byr(token):
-    return token.isnumeric() and 1920 <= int(token) <= 2002
-
-
-def valid_iyr(token):
-    return token.isnumeric() and 2010 <= int(token) <= 2020
-
-
-def valid_eyr(token):
-    return token.isnumeric() and 2020 <= int(token) <= 2030
+def valid_range(lo, hi, token):
+    return token.isnumeric() and lo <= int(token) <= hi
 
 
 def valid_hgt(token):
     _, num, unit = re.split(r'(\d+)', token)
-    if not num.isnumeric() or not unit.isalpha():
-        return False
-    if unit == 'in':
-        return 59 <= int(num) <= 76
-    if unit == 'cm':
-        return 150 <= int(num) <= 193
-    return False
+    return (unit == 'in' and valid_range(59, 76, num) or
+            unit == 'cm' and valid_range(150, 193, num))
 
 
-def valid_hcl(token):
-    return re.fullmatch('#[a-f0-9]{6}', token)
-
-
-def valid_ecl(token):
-    return token in ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
-
-
-def valid_pid(token):
-    return re.fullmatch('[0-9]{9}', token)
-
+ecl_options = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
 
 keys = {
-    'byr': valid_byr,
-    'iyr': valid_iyr,
-    'eyr': valid_eyr,
+    'byr': partial(valid_range, 1920, 2002),
+    'iyr': partial(valid_range, 2010, 2020),
+    'eyr': partial(valid_range, 2020, 2030),
     'hgt': valid_hgt,
-    'hcl': valid_hcl,
-    'ecl': valid_ecl,
-    'pid': valid_pid,
+    'hcl': partial(re.fullmatch, '#[a-f0-9]{6}'),
+    'ecl': lambda token: token in ecl_options,
+    'pid': partial(re.fullmatch, '[0-9]{9}'),
 }
 
+with open('../input/2020/day4.txt') as f: content = f.read()
+entries = content.split("\n\n")
+valid = new_valid = 0
 
 for entry in entries:
-    entry = entry.replace("\n", " ")
-    tokens = dict(x.split(":") for x in entry.split())
+    tokens = dict(x.split(":") for x in entry.replace("\n", " ").split())
 
-    all_keys = True
-    all_valid = True
+    all_keys = all_valid = True
     for key, validator in keys.items():
-        if key in tokens.keys():
-            if not validator(tokens[key]):
-                all_valid = False
-        else:
-            all_keys = False
+        all_keys &= key in tokens.keys()
+        all_valid &= all_keys and bool(validator(tokens[key]))
 
-    if all_keys:
-        valid += 1
-        if all_valid:
-            new_valid += 1
+    valid += int(all_keys)
+    new_valid += int(all_keys and all_valid)
 
-print(valid)
-print(new_valid)
+print(f"{valid}\n{new_valid}")
