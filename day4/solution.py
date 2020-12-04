@@ -3,8 +3,6 @@ import re
 with open('../input/2020/day4.txt') as f:
     content = f.read()
 
-optional_keys = ['cid']
-
 entries = content.split("\n\n")
 
 valid = 0
@@ -12,25 +10,19 @@ new_valid = 0
 
 
 def valid_byr(token):
-    if token.isnumeric():
-        return 1920 <= int(token) <= 2002
-    return False
+    return token.isnumeric() and 1920 <= int(token) <= 2002
 
 
 def valid_iyr(token):
-    if token.isnumeric():
-        return 2010 <= int(token) <= 2020
-    return False
+    return token.isnumeric() and 2010 <= int(token) <= 2020
 
 
 def valid_eyr(token):
-    if token.isnumeric():
-        return 2020 <= int(token) <= 2030
-    return False
+    return token.isnumeric() and 2020 <= int(token) <= 2030
 
 
 def valid_hgt(token):
-    _, num, unit = re.split('(\d+)', token)
+    _, num, unit = re.split(r'(\d+)', token)
     if not num.isnumeric() or not unit.isalpha():
         return False
     if unit == 'in':
@@ -41,8 +33,7 @@ def valid_hgt(token):
 
 
 def valid_hcl(token):
-    match = re.fullmatch('#[a-f0-9]{6}', token)
-    return match
+    return re.fullmatch('#[a-f0-9]{6}', token)
 
 
 def valid_ecl(token):
@@ -74,17 +65,13 @@ for entry in entries:
         if key in tokens.keys():
             if not validator(tokens[key]):
                 all_valid = False
-                print("invalid:", key, tokens[key])
-            else:
-                pass
-                #print("valid:", key, tokens[key])
         else:
             all_keys = False
 
     if all_keys:
         valid += 1
-    if all_keys and all_valid:
-        new_valid += 1
+        if all_valid:
+            new_valid += 1
 
 print(valid)
 print(new_valid)
